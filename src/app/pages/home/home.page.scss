@@ -1,0 +1,71 @@
+ion-title{
+    text-align: center;
+}
+
+.md {
+    --background: var(--ion-toolbar-background,var(--ion-background-color,#f8f8f8));
+    font-size: x-large;   
+}
+
+.custom {
+    --background: whitesmoke;
+}
+
+ion-card {
+    text-align: center;
+}
+
+.sc-ion-card-md-h {
+    --background: var(--ion-toolbar-background,var(--ion-background-color,#fff));
+    width: 100%;
+    padding: 13px 16px;  
+}
+
+ion-card-title {
+   margin-bottom: 10px;
+} 
+
+img {
+    display: block;
+    max-width: 128px;
+    min-width: 100px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.alert-message {
+    overflow: initial;
+}
+
+.alert-md .alert-wrapper {
+    max-width: 100%;
+}
+
+.alert-md .alert-title {
+    text-align: center;
+}
+
+.loading-md .loading-wrapper {
+    background-color: rgb(237,237,238);
+}
+
+input[type="file"] {
+    display: none;
+}
+.custom-file-upload {
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+    background-color: whitesmoke;
+    color: black;
+    font-size: large;
+}
+
+.custom-file-upload-icon {
+    vertical-align: bottom;
+}
+
+.custom-file-upload-span {
+    margin-left: 5px;
+}

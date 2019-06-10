@@ -1,0 +1,7 @@
+{
+  "name": "STN_App_Client",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}
