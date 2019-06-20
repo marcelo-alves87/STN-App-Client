@@ -1,0 +1,12 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title class="alert-head sc-ion-alert-md" style="text-align: center">Resultado da Medição</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="alert-wrapper sc-ion-alert-md" style="opacity: 1; transform: scale(1);">
+  <img [src]="'data:image/jpg;base64,'+image"/>
+  <div style="text-align: center">
+    <ion-button (click)='onClick()' color='light' style="margin-top: 30px">Fechar</ion-button>
+  </div> 
+</ion-content>

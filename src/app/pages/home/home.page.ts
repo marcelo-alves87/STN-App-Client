@@ -1,21 +1,22 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavController, AlertController, LoadingController} from '@ionic/angular';
+import { NavController, AlertController, LoadingController, ModalController } from '@ionic/angular';
 import { MeasurementPage } from '../measurement/measurement';
 import { HttpClient } from '@angular/common/http';
 import { AppServices } from '../../app.services';
+import { ModalPage } from '../modal/modal.page';
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
-})
+ })
 export class HomePage {
 
   @ViewChild('fileInput') fileInput: any;
   appServices:AppServices;
   loader: any;
 
-  constructor(public navCtrl: NavController,public alertCtrl: AlertController,public loadingCtrl: LoadingController, public httpClient: HttpClient) {
+  constructor(public navCtrl: NavController,public alertCtrl: AlertController,public loadingCtrl: LoadingController, public httpClient: HttpClient, public modalController: ModalController) {
     
     this.appServices = new AppServices(httpClient);
     
@@ -28,17 +29,36 @@ export class HomePage {
     this.loader.present();
   }
 
+  async createModal(data) {
+    const modal = await this.modalController.create({
+      component: ModalPage,
+      componentProps: {
+        'image': data.print
+      }
+    });
+    return await modal.present();
+  }
+
    processFile(fileEnconded64) {
     this.appServices.processFile(fileEnconded64).subscribe((data) => {
-      this.showAlertAndCloseLoading(data);
+       // Rede Neural
+      //this.showAlertAndCloseLoading(data);
+
+      //Figura do Tempo
+      this.showModalAndCloseLoading(data);
     });    
+  }
+
+  showModalAndCloseLoading(data) {
+    this.loader.dismiss();
+    this.createModal(data);    
   }
 
   async showAlertAndCloseLoading(data) {
     const alert = await this.alertCtrl.create({
       header: 'Resultado da Medição',
       //subHeader: 'Subtitle',
-      message: 'A haste está ' + data.print,
+      message: 'A haste está ' + 'data.print',
       buttons: ['Fechar']
     });
     this.loader.dismiss();
