@@ -33,19 +33,19 @@ export class HomePage {
     const modal = await this.modalController.create({
       component: ModalPage,
       componentProps: {
-        'image': data.print
+        'image': data.image
       }
     });
     return await modal.present();
   }
 
    processFile(fileEnconded64) {
-    this.appServices.processFile(fileEnconded64).subscribe((data) => {
-       // Rede Neural
-      //this.showAlertAndCloseLoading(data);
-
-      //Figura do Tempo
-      this.showModalAndCloseLoading(data);
+    this.appServices.processFile(fileEnconded64).subscribe((data:any) => {
+      if(data.print != undefined) {
+        this.showAlertAndCloseLoading(data);
+      } else if(data.image != undefined) {
+        this.showModalAndCloseLoading(data);
+      }
     });    
   }
 
@@ -58,7 +58,7 @@ export class HomePage {
     const alert = await this.alertCtrl.create({
       header: 'Resultado da Medição',
       //subHeader: 'Subtitle',
-      message: 'A haste está ' + 'data.print',
+      message: 'A haste está ' + data.print,
       buttons: ['Fechar']
     });
     this.loader.dismiss();

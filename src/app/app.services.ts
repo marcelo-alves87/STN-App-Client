@@ -9,6 +9,6 @@ export class AppServices {
     }
 
     processFile(fileName) {
-        return this.httpClient.post(URL + 'fileProcess', {'fileName' : fileName});
+        return this.httpClient.post(URL + 'fileProcess', {'fileName' : fileName, 'typeProcess' : 2});
     }
 }
