@@ -24,7 +24,8 @@ export class HomePage {
 
   async createLoading() {
     this.loader = await this.loadingCtrl.create({
-      message: 'Por favor, aguarde ...'
+      message: 'Por favor, aguarde ...',
+      cssClass: 'loading-custom'
     });
     this.loader.present();
   }
@@ -32,6 +33,7 @@ export class HomePage {
   async createModal(data) {
     const modal = await this.modalController.create({
       component: ModalPage,
+      cssClass: 'modal-custom',
       componentProps: {
         'image': data.image
       }
@@ -58,8 +60,9 @@ export class HomePage {
     const alert = await this.alertCtrl.create({
       header: 'Resultado da Medição',
       //subHeader: 'Subtitle',
-      message: 'A haste está ' + data.print,
-      buttons: ['Fechar']
+      message: 'A haste está ' + '<strong>' + data.print + '</strong>',
+      buttons: ['Fechar'],
+      cssClass: 'alert-custom'
     });
     this.loader.dismiss();
     await alert.present(); 
