@@ -1,9 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
 import { NavController, AlertController, LoadingController, ModalController } from '@ionic/angular';
-import { MeasurementPage } from '../measurement/measurement';
 import { HttpClient } from '@angular/common/http';
 import { AppServices } from '../../app.services';
 import { ModalPage } from '../modal/modal.page';
+
 
 @Component({
   selector: 'app-home',
@@ -12,7 +12,7 @@ import { ModalPage } from '../modal/modal.page';
  })
 export class HomePage {
 
-  @ViewChild('fileInput') fileInput: any;
+  
   appServices:AppServices;
   loader: any;
 
@@ -22,6 +22,7 @@ export class HomePage {
     
   }
 
+
   async createLoading() {
     this.loader = await this.loadingCtrl.create({
       message: 'Por favor, aguarde ...',
@@ -30,30 +31,53 @@ export class HomePage {
     this.loader.present();
   }
 
-  async createModal(data) {
-    const modal = await this.modalController.create({
-      component: ModalPage,
-      cssClass: 'modal-custom',
-      componentProps: {
-        'image': data.image
-      }
-    });
-    return await modal.present();
-  }
+  async showConnectionAndCalibrationStatus(data) {
+    
+    if(data.status == 0) {
 
-   processFile(fileEnconded64) {
-    this.appServices.processFile(fileEnconded64).subscribe((data:any) => {
-      if(data.print != undefined) {
-        this.showAlertAndCloseLoading(data);
-      } else if(data.image != undefined) {
-        this.showModalAndCloseLoading(data);
-      }
-    });    
-  }
+      const alert = await this.alertCtrl.create({
+        header: 'Mensagem',
+        //subHeader: 'Subtitle',
+        message: 'Não foi possível realizar a conexão com o intrumento.',
+        buttons: ['Fechar'],
+        cssClass: 'alert-custom'
+      });
+      this.loader.dismiss();
+      await alert.present(); 
 
-  showModalAndCloseLoading(data) {
-    this.loader.dismiss();
-    this.createModal(data);    
+    }
+
+    else if(data.status == 1) {
+      const alert = await this.alertCtrl.create({
+        header: 'Mensagem',
+        //subHeader: 'Subtitle',
+        message: 'Nenhuma calibração foi encontrada. Por favor, realize a calibração mecânica com as cargas de calibração.',
+        buttons: ['Continuar'],
+        cssClass: 'alert-custom'
+      });
+      this.loader.dismiss();
+      await alert.present(); 
+    }
+
+    else if(data.status == 2) {
+        const alert = await this.alertCtrl.create({
+          header: 'Mensagem',
+          //subHeader: 'Subtitle',
+          message: 'A última calibração foi feita em ' + data.date + '. Deseja realizar uma nova calibração?',
+          buttons: [{ text: 'Não', cssClass: 'secondary', handler: () => {
+            alert.dismiss();
+            //this.createMeasurementForm();
+          }}, {
+            text: 'Sim',
+            handler: () => {
+              //console.log('Fazer a calibração');
+            }
+          }],
+          cssClass: 'alert-custom'
+        });
+        this.loader.dismiss();
+        await alert.present(); 
+    }
   }
 
   async showAlertAndCloseLoading(data) {
@@ -68,23 +92,73 @@ export class HomePage {
     await alert.present(); 
   }
 
-  onFileChange(event){
-    let files = event.target.files;
-    this.createLoading();
-    this.encode64File(files[0]);
-    this.fileInput.nativeElement.value = ''; 
-    
-  } 
-
-  encode64File(inputValue: any): void {
-    var myReader:FileReader = new FileReader();
   
-    myReader.onloadend = (e) => {
-      this.processFile(myReader.result);
-    }
-    myReader.readAsDataURL(inputValue);
+  myclick() {
+    this.checkConnectionAndCalibrationStatus();
+    
   }
 
+  checkConnectionAndCalibrationStatus() {
+    this.createLoading();
+    this.appServices.checkConnectionAndCalibrationStatus().subscribe((data:any) => {
+      console.log(data);
+      this.showConnectionAndCalibrationStatus(data);
+    });
+  }
+
+ async createMeasurementForm() {
+  
+  const modal = await this.modalController.create({
+    component: ModalPage,
+    cssClass: 'modal-custom',
+      componentProps: {
+        //'image': data.image
+      }
+  });
+  modal.onDidDismiss()
+      .then((data : any) => {
+        this.executeProcess(data.data); // Here's your selected user!
+    });
+  return await modal.present();
+  }
+  executeProcess(data) {
+    this.appServices.processFile(data).subscribe((data1) => {
+        console.log(data1);
+    });
+  }
+
+   
+   /* processFile(fileEnconded64) {
+    this.appServices.processFile(fileEnconded64).subscribe((data:any) => {
+      if(data.print != undefined) {
+        this.showAlertAndCloseLoading(data);
+      } else if(data.image != undefined) {
+        this.showModalAndCloseLoading(data);
+      }
+    });    
+  } */
+
+ 
+
+ /*  // onFileChange(event){
+  //   let files = event.target.files;
+  //   this.createLoading();
+  //   this.encode64File(files[0]);
+  //   this.fileInput.nativeElement.value = ''; 
+    
+  } 
+ */
+ 
+
+  
+ // encode64File(inputValue: any): void {
+  //   var myReader:FileReader = new FileReader();
+  
+  //   myReader.onloadend = (e) => {
+  //     this.processFile(myReader.result);
+  //   }
+  //   myReader.readAsDataURL(inputValue);
+  // }
   /* getData() {
     this.httpClient.get('http://localhost:3000')
     .subscribe((data) => {

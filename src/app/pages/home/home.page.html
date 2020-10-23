@@ -2,8 +2,8 @@
   <ion-toolbar>
     <ion-title>
       Sistema de Transmissão Nordeste
-    </ion-title>
-  </ion-toolbar>
+    </ion-title>    
+  </ion-toolbar> 
 </ion-header>
 
 <ion-content padding class="custom">
@@ -16,13 +16,9 @@
         <ion-card-content>
           <ion-card-title>
             Detector de Corrosão em Hastes de Âncora
-          </ion-card-title>
-             <label class="custom-file-upload">
-                <ion-icon class="custom-file-upload-icon" name="cloud-upload"></ion-icon> 
-                <span class="custom-file-upload-span">Anexar Arquivo</span>
-                <input (change)="onFileChange($event)" type="file" accept=".csv" #fileInput />
-            </label>                       
-          </ion-card-content>
+          </ion-card-title>          
+            <ion-button color="primary" (click)='myclick()'><span class='button-text'>Iniciar</span></ion-button>                     
+        </ion-card-content>
       </ion-card>
     </ion-row>
   </ion-grid>

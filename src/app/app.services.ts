@@ -2,13 +2,18 @@ import { HttpClient } from '@angular/common/http';
 
 const URL = 'http://localhost:3000/';
 
-export class AppServices {     
+export class AppServices {
+    
 
     constructor(public httpClient: HttpClient) {
 
     }
 
-    processFile(fileName) {
-        return this.httpClient.post(URL + 'fileProcess', {'fileName' : fileName, 'typeProcess' : 2});
+    processFile(data) {
+        return this.httpClient.post(URL + 'fileProcess', data);
     }
+
+    checkConnectionAndCalibrationStatus() {
+        return this.httpClient.post(URL + 'checkConnectionAndCalibrationStatus', {'data' : 0});
+    }     
 }

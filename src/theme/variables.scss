@@ -84,6 +84,11 @@
   transform: scale(2) !important;
 }
 
-.modal-custom .modal-wrapper {
-  transform: scale(1.4) !important;
+.modal-wrapper.sc-ion-modal-md {
+  height: 50% !important;
 }
+
+.alert-message {
+  overflow: initial;
+}
+
