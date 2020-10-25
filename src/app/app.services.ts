@@ -13,6 +13,10 @@ export class AppServices {
         return this.httpClient.post(URL + 'fileProcess', data);
     }
 
+    shutdown() {
+        return this.httpClient.post(URL + 'shutdown', { 'data' : 0 });
+    }
+
     checkConnectionAndCalibrationStatus() {
         return this.httpClient.post(URL + 'checkConnectionAndCalibrationStatus', {'data' : 0});
     }     

@@ -1,8 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavController, AlertController, LoadingController, ModalController } from '@ionic/angular';
+import { NavController, AlertController, LoadingController, ModalController, MenuController } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
 import { AppServices } from '../../app.services';
 import { ModalPage } from '../modal/modal.page';
+
 
 
 @Component({
@@ -12,15 +13,25 @@ import { ModalPage } from '../modal/modal.page';
  })
 export class HomePage {
 
-  
   appServices:AppServices;
   loader: any;
 
-  constructor(public navCtrl: NavController,public alertCtrl: AlertController,public loadingCtrl: LoadingController, public httpClient: HttpClient, public modalController: ModalController) {
+  constructor(public navCtrl: NavController,public alertCtrl: AlertController,public loadingCtrl: LoadingController, public httpClient: HttpClient, public modalController: ModalController, public menuController : MenuController) {
     
     this.appServices = new AppServices(httpClient);
     
   }
+
+  shutdown() {
+   console.log('a')
+  }
+
+  openMenu() {
+    this.menuController.open();
+  }
+
+
+
 
 
   async createLoading() {
