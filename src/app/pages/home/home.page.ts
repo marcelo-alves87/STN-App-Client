@@ -1,5 +1,5 @@
-import { Component, ViewChild } from '@angular/core';
-import { NavController, AlertController, LoadingController, ModalController, MenuController } from '@ionic/angular';
+import { Component } from '@angular/core';
+import { NavController, AlertController, LoadingController, ModalController, MenuController, Events } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
 import { AppServices } from '../../app.services';
 import { ModalPage } from '../modal/modal.page';
@@ -16,14 +16,31 @@ export class HomePage {
   appServices:AppServices;
   loader: any;
 
-  constructor(public navCtrl: NavController,public alertCtrl: AlertController,public loadingCtrl: LoadingController, public httpClient: HttpClient, public modalController: ModalController, public menuController : MenuController) {
+    
+  constructor(public navCtrl: NavController,public alertCtrl: AlertController,public loadingCtrl: LoadingController, public httpClient: HttpClient, public modalController: ModalController, public menuController : MenuController, public events: Events) {
     
     this.appServices = new AppServices(httpClient);
-    
+
+    events.subscribe('about', (data) => {
+      this.showAboutAlert();
+    });
+        
+  }
+
+  async showAboutAlert() {
+    this.menuController.close();
+    const alert = this.alertCtrl.create({
+      header: 'Mensagem',
+      //subHeader: 'Subtitle',
+      message: 'Este sistema é resultado de um projeto de pesquisa desenvolvido pelas instituições UFPE, para a empresa STN.',
+      buttons: ['Fechar'],
+      cssClass: 'alert-custom'
+    });
+    (await alert).present(); 
   }
 
   shutdown() {
-   console.log('a')
+    this.menuController.close();
   }
 
   openMenu() {
@@ -42,60 +59,217 @@ export class HomePage {
     this.loader.present();
   }
 
+
+  async createNonVNAConnectionAlert() {
+    const alert = await this.alertCtrl.create({
+      header: 'Mensagem',
+      //subHeader: 'Subtitle',
+      message: 'Não foi possível realizar a conexão com o intrumento. Por favor, tente novamente.',
+      buttons: ['Fechar'],
+      cssClass: 'alert-custom'
+    });
+    this.loader.dismiss();
+    await alert.present(); 
+  }
+
   async showConnectionAndCalibrationStatus(data) {
-    
-    if(data.status == 0) {
-
-      const alert = await this.alertCtrl.create({
-        header: 'Mensagem',
-        //subHeader: 'Subtitle',
-        message: 'Não foi possível realizar a conexão com o intrumento.',
-        buttons: ['Fechar'],
-        cssClass: 'alert-custom'
+   
+    if(data.status == 1) {
+     
+      this.appServices.checkCalAlreadySaved().subscribe((data:any) => {
+        this.loader.dismiss();
+        if(data.status == 0) {
+         this.startNewCalibrationAlert();
+        } else {
+          this.confirmLoadedCalAlert(data);
+        }         
       });
-      this.loader.dismiss();
-      await alert.present(); 
+    } else {
+      this.createNonVNAConnectionAlert();
+    }
 
+
+    /*if(data.status == '1') {
+      this.appServices.checkCalAlreadySaved().subscribe((data:any) => {
+        console.log(data);         
+      }); 
+    }
+    if(data.status === '0.1.0') {
+      this.startNewCalibrationAlert();
+    }
+
+    if(data.status === '0.1.1') {
+      this.confirmLoadedCalAlert(data);
+    }
+    
+    else if(data.status == 0) {
+
+      this.createNonVNAConnection();
+
+    }
+
+    else if(data.status === '1.1') {
+      this.startNewCalibrationAlert();
     }
 
     else if(data.status == 1) {
-      const alert = await this.alertCtrl.create({
-        header: 'Mensagem',
-        //subHeader: 'Subtitle',
-        message: 'Nenhuma calibração foi encontrada. Por favor, realize a calibração mecânica com as cargas de calibração.',
-        buttons: ['Continuar'],
-        cssClass: 'alert-custom'
-      });
-      this.loader.dismiss();
-      await alert.present(); 
-    }
-
-    else if(data.status == 2) {
-        const alert = await this.alertCtrl.create({
-          header: 'Mensagem',
-          //subHeader: 'Subtitle',
-          message: 'A última calibração foi feita em ' + data.date + '. Deseja realizar uma nova calibração?',
-          buttons: [{ text: 'Não', cssClass: 'secondary', handler: () => {
-            alert.dismiss();
-            //this.createMeasurementForm();
-          }}, {
-            text: 'Sim',
-            handler: () => {
-              //console.log('Fazer a calibração');
-            }
-          }],
-          cssClass: 'alert-custom'
-        });
-        this.loader.dismiss();
-        await alert.present(); 
-    }
+        
+    }*/
   }
 
+async confirmLoadedCalAlert(data) {
+  const alert = await this.alertCtrl.create({
+    header: 'Mensagem',
+    //subHeader: 'Subtitle',
+    message: 'A última calibração foi feita em ' + data.date.trim() +'. Deseja realizar uma nova calibração?',
+    buttons: [{ text: 'Não', cssClass: 'secondary', handler: () => {
+      alert.dismiss();
+      this.createMeasurementForm();
+    }}, {
+      text: 'Sim',
+      handler: () => {
+        this.startNewCalibration();
+      }
+    }],
+    cssClass: 'alert-custom'
+  });
+  this.loader.dismiss();
+  await alert.present(); 
+}
+
+async startNewCalibrationAlert() {
+  const alert = await this.alertCtrl.create({
+    header: 'Mensagem',
+    //subHeader: 'Subtitle',
+    message: 'Nenhuma calibração foi encontrada. Por favor, realize a calibração mecânica com as cargas de calibração.',
+    buttons: ['Fechar', { text : 'Continuar', handler: () => {
+      alert.dismiss();
+      this.startNewCalibration();
+    }}],
+    cssClass: 'alert-custom'
+  });
+  this.loader.dismiss();
+  await alert.present();
+}
+
+
+ async startNewCalibration() {
+    this.appServices.startNewCalibration().subscribe((data:any) => {
+         
+          if(data.status === '1.0') {
+            this.createNonVNAConnectionAlert();
+          } else if(data.status === '1.1') {
+            this.createInitCalibrationProcess();
+          } 
+    });    
+  }
+ async createInitCalibrationProcess() {
+    const alert = await this.alertCtrl.create({
+      header: 'Mensagem',
+      //subHeader: 'Subtitle',
+      message: 'Por favor, continue o processo de calibração com as cargas de calibração em mãos.',
+      buttons: [{ text: 'Fechar'} , { text: 'Continuar', handler: () => {
+        alert.dismiss();
+        this.createOpenCalibration();
+      }}],
+      cssClass: 'alert-custom'
+    });
+    this.loader.dismiss();
+    await alert.present(); 
+  }
+  async createOpenCalibration() {
+    const alert = await this.alertCtrl.create({
+      header: 'Mensagem',
+      //subHeader: 'Subtitle',
+      message: 'Por favor, conecte a carga Open e continue o processo.',
+      buttons: [{ text: 'Fechar'} , { text: 'Continuar', handler: () => {
+        alert.dismiss();
+        this.appServices.openCalibrationStatus().subscribe(data => {
+            if(data === '2.1') {
+              this.createNonVNAConnectionAlert();
+            } else {
+              this.createShortCalibration();
+            }
+        });
+      }}],
+      cssClass: 'alert-custom'
+    });
+    this.loader.dismiss();
+    await alert.present(); 
+  }
+  
+  async createShortCalibration() {
+    const alert = await this.alertCtrl.create({
+      header: 'Mensagem',
+      //subHeader: 'Subtitle',
+      message: 'Por favor, conecte a carga Short e continue o processo.',
+      buttons: [{ text: 'Fechar'} , { text: 'Continuar', handler: () => {
+        alert.dismiss();
+        this.appServices.shortCalibrationStatus().subscribe(data => {
+            if(data === '3.1') {
+              this.createNonVNAConnectionAlert();
+            } else {
+              this.createLoadCalibration();
+            }
+        });
+      }}],
+      cssClass: 'alert-custom'
+    });
+    this.loader.dismiss();
+    await alert.present(); 
+  }
+  async createLoadCalibration() {
+    const alert = await this.alertCtrl.create({
+      header: 'Mensagem',
+      //subHeader: 'Subtitle',
+      message: 'Por favor, conecte a carga Load e continue o processo.',
+      buttons: [{ text: 'Fechar'} , { text: 'Continuar', handler: () => {
+        alert.dismiss();
+        this.appServices.loadCalibrationStatus().subscribe(data => {
+            if(data === '4.1') {
+              this.createNonVNAConnectionAlert();
+            } else {
+              this.createAlertSaveCalibration();
+            }
+        });
+      }}],
+      cssClass: 'alert-custom'
+    });
+    this.loader.dismiss();
+    await alert.present(); 
+  }
+
+ async createAlertSaveCalibration() {
+    this.loader = await this.loadingCtrl.create({
+      message: 'Por favor, aguarde a finalização da calibração ...',
+      cssClass: 'loading-custom'
+    });
+    this.loader.present();
+    this.appServices.saveCalibrationStatus().subscribe(data => {
+      if(data === '5.1') {
+        this.createNonVNAConnectionAlert();
+      } else {
+        this.loader.dismiss();
+        this.createMeasurementForm();
+      }
+    });
+  }
+  
+  
+
   async showAlertAndCloseLoading(data) {
+    data = JSON.parse(data.data)
+   
+    if(data[0] == 1) {
+      data[0] = 'defeituosa'
+    } else if (data[0] == 0){
+      data[0] = 'normal' 
+    }
+    var num = data[1] * 100
     const alert = await this.alertCtrl.create({
       header: 'Resultado da Medição',
       //subHeader: 'Subtitle',
-      message: 'A haste está ' + '<strong>' + data.print + '</strong>',
+      message: 'A haste está ' + '<strong>' + data[0] + '</strong>, medida com ' + num + '% de precisão.',
       buttons: ['Fechar'],
       cssClass: 'alert-custom'
     });
@@ -106,13 +280,12 @@ export class HomePage {
   
   myclick() {
     this.checkConnectionAndCalibrationStatus();
-    
   }
 
   checkConnectionAndCalibrationStatus() {
     this.createLoading();
     this.appServices.checkConnectionAndCalibrationStatus().subscribe((data:any) => {
-      console.log(data);
+      //console.log(data);
       this.showConnectionAndCalibrationStatus(data);
     });
   }
@@ -128,17 +301,26 @@ export class HomePage {
   });
   modal.onDidDismiss()
       .then((data : any) => {
-        this.executeProcess(data.data); // Here's your selected user!
+        this.executeProcess(data); // Here's your selected user!
     });
   return await modal.present();
   }
   executeProcess(data) {
-    this.appServices.processFile(data).subscribe((data1) => {
-        console.log(data1);
+      this.processData(data);
+  }
+  
+  async processData(data: any) {
+    this.createLoading();
+    this.appServices.processFile(data.data).subscribe((data1) => {
+      this.loader.dismiss();
+      
+      this.showAlertAndCloseLoading(data1);
     });
   }
 
-   
+
+  
+
    /* processFile(fileEnconded64) {
     this.appServices.processFile(fileEnconded64).subscribe((data:any) => {
       if(data.print != undefined) {

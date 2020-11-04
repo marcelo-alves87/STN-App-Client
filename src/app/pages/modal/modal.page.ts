@@ -24,13 +24,13 @@ export class ModalPage {
     let data = [];
    
     if(!this.isStringEmpty(this.operator)) {
-      data.push({'operator' : this.operator});
+      data.push({'operador' : this.operator});
       if(!this.isStringEmpty(this.line)) {
         data.push({'linha' : this.line});
         if(!this.isStringEmpty(this.tower)) {
           data.push({'torre' : this.tower});
           if(!this.isStringEmpty(this.estai)) {
-            data.push({'torre' : this.estai});
+            data.push({'estai' : this.estai});
             this.modalCtrl.dismiss(data);
           }
         }
