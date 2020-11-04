@@ -259,17 +259,47 @@ async startNewCalibrationAlert() {
 
   async showAlertAndCloseLoading(data) {
     data = JSON.parse(data.data)
-   
+
     if(data[0] == 1) {
       data[0] = 'defeituosa'
     } else if (data[0] == 0){
       data[0] = 'normal' 
     }
-    var num = data[1] * 100
+    var num = (data[1] * 100).toFixed(0)
+    var num1 = parseInt(num)
+    var vel_img = 'Vel_1.png';
+    if(num1 <= 8.3333) {
+      vel_img = 'Vel_1.png'
+    } else if(num1 > 8.3333 && num1 <= 16.6666) {
+      vel_img = 'Vel_2.png'
+    } else if(num1 > 16.666 && num1 <= 25) {
+      vel_img = 'Vel_3.png'
+    } else if(num1 > 25 && num1 <= 33.333) {
+      vel_img = 'Vel_4.png'
+    } else if(num1 > 33.333 && num1 <= 41.666) {
+      vel_img = 'Vel_5.png'
+    } else if(num1 > 41.666 && num1 <= 50) {
+      vel_img = 'Vel_6.png'
+    } else if(num1 > 50 && num1 <= 58.333) {
+      vel_img = 'Vel_7.png'
+    } else if(num1 > 58.333 && num1 <= 66.666) {
+      vel_img = 'Vel_8.png'
+    } else if(num1 > 66.666 && num1 <= 75) {
+      vel_img = 'Vel_9.png'
+    } else if(num1 > 75 && num1 <= 83.333) {
+      vel_img = 'Vel_10.png'
+    } else if(num1 > 83.333 && num1 <= 91.666) {
+      vel_img = 'Vel_11.png'
+    } else if(num1 > 91.666) {
+      vel_img = "Vel_12.png"
+    }
+ 
+
     const alert = await this.alertCtrl.create({
       header: 'Resultado da Medição',
       //subHeader: 'Subtitle',
-      message: 'A haste está ' + '<strong>' + data[0] + '</strong>, medida com ' + num + '% de precisão.',
+
+      message:'<ion-grid style="height: 100%"><ion-row justify-content-center><img class="velocity" src="../assets/imgs/' + vel_img + '"/></ion-row><ion-row class="velocity-percent-row" justify-content-center><span class="velocity-percent">%</span></ion-row><ion-row justify-content-center><span class="velocity-text">' + num + '</span></ion-row><ion-row class="process-result-row" justify-content-center><span class="process-result">A haste está ' + '<strong>' + data[0] + '</strong>.</ion-row></ion-grid>',
       buttons: ['Fechar'],
       cssClass: 'alert-custom'
     });
@@ -279,6 +309,7 @@ async startNewCalibrationAlert() {
 
   
   myclick() {
+
     this.checkConnectionAndCalibrationStatus();
   }
 
