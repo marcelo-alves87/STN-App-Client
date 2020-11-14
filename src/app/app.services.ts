@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 //const URL = 'http://localhost:3000/';
 const URL = 'http://192.168.0.154:3000/';
 export class AppServices {
+    
    
    
     
@@ -45,4 +46,8 @@ export class AppServices {
     checkConnectionAndCalibrationStatus() {
         return this.httpClient.post(URL + 'checkConnectionAndCalibrationStatus', {'data' : 0});
     }     
+
+    startMeasurement(data: any) {
+        return this.httpClient.post(URL + 'startMeasurement', data);
+    }
 }

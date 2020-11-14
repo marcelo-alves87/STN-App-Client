@@ -32,15 +32,32 @@ export class HomePage {
     const alert = this.alertCtrl.create({
       header: 'Mensagem',
       //subHeader: 'Subtitle',
-      message: 'Este sistema é resultado de um projeto de pesquisa desenvolvido pelas instituições UFPE, para a empresa STN.',
+      message: 'Este sistema é resultado de um projeto de pesquisa desenvolvido pelas instituições UFPE – Universidade Federal de Pernambuco, e IATI – Instituto Avançado de Tecnologia e Inovação, para a empresa Sistema de Transmissão Nordeste S.A. - STN, vinculado ao Programa de Pesquisa e Desenvolvimento do Setor Elétrico Brasileiro promovido pela ANEEL – Agência Nacional de Energia Elétrica.',
       buttons: ['Fechar'],
-      cssClass: 'alert-custom'
+      cssClass: 'alert-custom alert-about'
     });
     (await alert).present(); 
   }
 
-  shutdown() {
-    this.menuController.close();
+  async shutdown() {
+    const alert = this.alertCtrl.create({
+      header: 'Mensagem',
+      //subHeader: 'Subtitle',
+      message: 'Deseja realmente fechar a aplicação?',
+      buttons: ['Não', {
+        text: 'Sim',
+        handler: () => {
+          this.shutdownNow();
+        }
+      }],
+      cssClass: 'alert-custom'
+    });
+    (await alert).present(); 
+  }
+  shutdownNow() {
+    this.appServices.shutdown().subscribe((data:any) => {
+               
+    });
   }
 
   openMenu() {
@@ -124,7 +141,8 @@ async confirmLoadedCalAlert(data) {
     message: 'A última calibração foi feita em ' + data.date.trim() +'. Deseja realizar uma nova calibração?',
     buttons: [{ text: 'Não', cssClass: 'secondary', handler: () => {
       alert.dismiss();
-      this.createMeasurementForm();
+      //this.createMeasurementForm();
+      this.processData({});
     }}, {
       text: 'Sim',
       handler: () => {
@@ -250,7 +268,8 @@ async startNewCalibrationAlert() {
         this.createNonVNAConnectionAlert();
       } else {
         this.loader.dismiss();
-        this.createMeasurementForm();
+        //this.createMeasurementForm();
+        this.processData({});
       }
     });
   }
@@ -258,6 +277,7 @@ async startNewCalibrationAlert() {
   
 
   async showAlertAndCloseLoading(data) {
+    if(data != undefined && data.data != undefined && Object.keys(data.data).length > 0) {
     data = JSON.parse(data.data)
 
     if(data[0] == 1) {
@@ -305,11 +325,11 @@ async startNewCalibrationAlert() {
     });
     this.loader.dismiss();
     await alert.present(); 
+   } 
   }
 
   
   myclick() {
-
     this.checkConnectionAndCalibrationStatus();
   }
 
@@ -341,12 +361,34 @@ async startNewCalibrationAlert() {
   }
   
   async processData(data: any) {
+    /* Sem correlação
     this.createLoading();
     this.appServices.processFile(data.data).subscribe((data1) => {
       this.loader.dismiss();
-      
       this.showAlertAndCloseLoading(data1);
+    });*/
+    //data.data.push({'corr' : 1})
+    //console.log(data)
+    data = {'corr' : 1}
+    this.startMeasurement(data);
+  }
+ 
+  async startMeasurement(data) {
+    const alert = await this.alertCtrl.create({
+      header: 'Mensagem',
+      //subHeader: 'Subtitle',
+      message: 'Por favor, realize a primeira medição.',
+      buttons: [{ text: 'Fechar'} , { text: 'Continuar', handler: () => {
+        alert.dismiss();
+        this.appServices.startMeasurement(data).subscribe((data1) => {
+          this.loader.dismiss();
+          //this.start(data1);
+        });
+      }}],
+      cssClass: 'alert-custom'
     });
+    this.loader.dismiss();
+    await alert.present(); 
   }
 
 
