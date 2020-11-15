@@ -142,7 +142,7 @@ async confirmLoadedCalAlert(data) {
     buttons: [{ text: 'Não', cssClass: 'secondary', handler: () => {
       alert.dismiss();
       //this.createMeasurementForm();
-      this.processData({});
+      this.processData();
     }}, {
       text: 'Sim',
       handler: () => {
@@ -269,7 +269,7 @@ async startNewCalibrationAlert() {
       } else {
         this.loader.dismiss();
         //this.createMeasurementForm();
-        this.processData({});
+        this.processData();
       }
     });
   }
@@ -357,32 +357,57 @@ async startNewCalibrationAlert() {
   return await modal.present();
   }
   executeProcess(data) {
-      this.processData(data);
+      this.processData();
   }
   
-  async processData(data: any) {
-    /* Sem correlação
+  async processData() {
     this.createLoading();
-    this.appServices.processFile(data.data).subscribe((data1) => {
+    this.appServices.processFile().subscribe((data1) => {
       this.loader.dismiss();
       this.showAlertAndCloseLoading(data1);
-    });*/
-    //data.data.push({'corr' : 1})
-    //console.log(data)
-    data = {'corr' : 1}
-    this.startMeasurement(data);
+    });    
   }
  
-  async startMeasurement(data) {
+  async startOtherMeasurement(data) {
+    data['corr'] += 1;
     const alert = await this.alertCtrl.create({
       header: 'Mensagem',
       //subHeader: 'Subtitle',
-      message: 'Por favor, realize a primeira medição.',
+      message: 'Por favor, remonte corretamente o MDSC e continue a medição.',
       buttons: [{ text: 'Fechar'} , { text: 'Continuar', handler: () => {
         alert.dismiss();
+        this.createLoading();
         this.appServices.startMeasurement(data).subscribe((data1) => {
           this.loader.dismiss();
-          //this.start(data1);
+          if(data1['data'] == 0) {
+            this.startOtherMeasurement(data);
+          } else if(data1['data'] == 2) {
+             this.processData();
+          }
+        });
+      }}],
+      cssClass: 'alert-custom'
+    });
+    this.loader.dismiss();
+    await alert.present(); 
+
+  }
+
+  async startMeasurement() {
+    const alert = await this.alertCtrl.create({
+      header: 'Mensagem',
+      //subHeader: 'Subtitle',
+      message: 'Por favor, após a montagem correta do MDSC, continue a medição.',
+      buttons: [{ text: 'Fechar'} , { text: 'Continuar', handler: () => {
+        alert.dismiss();
+        this.createLoading();
+        this.appServices.startMeasurement({'corr' : 1}).subscribe((data1) => {
+          this.loader.dismiss();
+          if(data1['data'] == 0) {
+            this.startOtherMeasurement({'corr' : 1});
+          } else {
+            // criar alerta de erro
+          }
         });
       }}],
       cssClass: 'alert-custom'
