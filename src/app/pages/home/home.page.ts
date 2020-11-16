@@ -142,7 +142,7 @@ async confirmLoadedCalAlert(data) {
     buttons: [{ text: 'Não', cssClass: 'secondary', handler: () => {
       alert.dismiss();
       //this.createMeasurementForm();
-      this.processData();
+      this.startMeasurement();
     }}, {
       text: 'Sim',
       handler: () => {
@@ -269,7 +269,7 @@ async startNewCalibrationAlert() {
       } else {
         this.loader.dismiss();
         //this.createMeasurementForm();
-        this.processData();
+        this.startMeasurement();
       }
     });
   }
@@ -277,55 +277,27 @@ async startNewCalibrationAlert() {
   
 
   async showAlertAndCloseLoading(data) {
-    if(data != undefined && data.data != undefined && Object.keys(data.data).length > 0) {
-    data = JSON.parse(data.data)
-
-    if(data[0] == 1) {
-      data[0] = 'defeituosa'
-    } else if (data[0] == 0){
-      data[0] = 'normal' 
+    var name = ''
+    //console.log(data['data1'])
+    
+    if(data['data1'] == 1) {
+      name = 'defeituosa.'
+    } else if (data['data1'] == 0){
+      name = 'normal.' 
     }
-    var num = (data[1] * 100).toFixed(0)
-    var num1 = parseInt(num)
-    var vel_img = 'Vel_1.png';
-    if(num1 <= 8.3333) {
-      vel_img = 'Vel_1.png'
-    } else if(num1 > 8.3333 && num1 <= 16.6666) {
-      vel_img = 'Vel_2.png'
-    } else if(num1 > 16.666 && num1 <= 25) {
-      vel_img = 'Vel_3.png'
-    } else if(num1 > 25 && num1 <= 33.333) {
-      vel_img = 'Vel_4.png'
-    } else if(num1 > 33.333 && num1 <= 41.666) {
-      vel_img = 'Vel_5.png'
-    } else if(num1 > 41.666 && num1 <= 50) {
-      vel_img = 'Vel_6.png'
-    } else if(num1 > 50 && num1 <= 58.333) {
-      vel_img = 'Vel_7.png'
-    } else if(num1 > 58.333 && num1 <= 66.666) {
-      vel_img = 'Vel_8.png'
-    } else if(num1 > 66.666 && num1 <= 75) {
-      vel_img = 'Vel_9.png'
-    } else if(num1 > 75 && num1 <= 83.333) {
-      vel_img = 'Vel_10.png'
-    } else if(num1 > 83.333 && num1 <= 91.666) {
-      vel_img = 'Vel_11.png'
-    } else if(num1 > 91.666) {
-      vel_img = "Vel_12.png"
-    }
- 
+    
 
     const alert = await this.alertCtrl.create({
       header: 'Resultado da Medição',
       //subHeader: 'Subtitle',
 
-      message:'<ion-grid style="height: 100%"><ion-row justify-content-center><img class="velocity" src="../assets/imgs/' + vel_img + '"/></ion-row><ion-row class="velocity-percent-row" justify-content-center><span class="velocity-percent">%</span></ion-row><ion-row justify-content-center><span class="velocity-text">' + num + '</span></ion-row><ion-row class="process-result-row" justify-content-center><span class="process-result">A haste está ' + '<strong>' + data[0] + '</strong>.</ion-row></ion-grid>',
+      message:'A haste está ' + '<strong>' + name + '</strong>',
       buttons: ['Fechar'],
       cssClass: 'alert-custom'
     });
     this.loader.dismiss();
     await alert.present(); 
-   } 
+   
   }
 
   
@@ -357,7 +329,7 @@ async startNewCalibrationAlert() {
   return await modal.present();
   }
   executeProcess(data) {
-      this.processData();
+      this.startMeasurement();
   }
   
   async processData() {
@@ -367,22 +339,68 @@ async startNewCalibrationAlert() {
       this.showAlertAndCloseLoading(data1);
     });    
   }
+
+  getCorrImage(corr_value) {
+    var num = (corr_value * 100).toFixed(0)
+    var num1 = parseInt(num)
+    var vel_img = 'Vel_1.png';
+    if(num1 <= 8.3333) {
+      vel_img = 'Vel_1.png'
+    } else if(num1 > 8.3333 && num1 <= 16.6666) {
+      vel_img = 'Vel_2.png'
+    } else if(num1 > 16.666 && num1 <= 25) {
+      vel_img = 'Vel_3.png'
+    } else if(num1 > 25 && num1 <= 33.333) {
+      vel_img = 'Vel_4.png'
+    } else if(num1 > 33.333 && num1 <= 41.666) {
+      vel_img = 'Vel_5.png'
+    } else if(num1 > 41.666 && num1 <= 50) {
+      vel_img = 'Vel_6.png'
+    } else if(num1 > 50 && num1 <= 58.333) {
+      vel_img = 'Vel_7.png'
+    } else if(num1 > 58.333 && num1 <= 66.666) {
+      vel_img = 'Vel_8.png'
+    } else if(num1 > 66.666 && num1 <= 75) {
+      vel_img = 'Vel_9.png'
+    } else if(num1 > 75 && num1 <= 83.333) {
+      vel_img = 'Vel_10.png'
+    } else if(num1 > 83.333 && num1 <= 91.666) {
+      vel_img = 'Vel_11.png'
+    } else if(num1 > 91.666) {
+      vel_img = "Vel_12.png"
+    }
+    return vel_img
+  }
  
   async startOtherMeasurement(data) {
     data['corr'] += 1;
+
+    var message1 = 'Por favor, remonte corretamente o MDSC e continue a medição.';
+
+    if(data['corr_value'] != undefined) {
+      var vel_img = this.getCorrImage(data['corr_value'])
+      var num = (data['corr_value'] * 100).toFixed(0)      
+      message1 = '<ion-grid style="height: 100%"><ion-row justify-content-center><img class="velocity" src="../assets/imgs/' + vel_img + '"/></ion-row><ion-row class="velocity-percent-row" justify-content-center><span class="velocity-percent">%</span></ion-row><ion-row justify-content-center><span class="velocity-text">' + num + '</span></ion-row><ion-row class="process-result-row" justify-content-center><span class="process-result">' + message1 + '</ion-row></ion-grid>'
+    }
+
     const alert = await this.alertCtrl.create({
       header: 'Mensagem',
       //subHeader: 'Subtitle',
-      message: 'Por favor, remonte corretamente o MDSC e continue a medição.',
+      message: message1,
       buttons: [{ text: 'Fechar'} , { text: 'Continuar', handler: () => {
         alert.dismiss();
         this.createLoading();
         this.appServices.startMeasurement(data).subscribe((data1) => {
-          this.loader.dismiss();
+         this.loader.dismiss();
           if(data1['data'] == 0) {
             this.startOtherMeasurement(data);
           } else if(data1['data'] == 2) {
              this.processData();
+          } else if(data1['data'] == 1) {
+            this.creatDefaultAlert('Não foi possível obter um valor mínimo de correlação. Por favor, tente novamente.')
+          } else if(data1['data'] == 3) {
+            data['corr_value'] = data1['corr']
+            this.startOtherMeasurement(data);
           }
         });
       }}],
@@ -393,11 +411,23 @@ async startNewCalibrationAlert() {
 
   }
 
+  async creatDefaultAlert(message1) {
+    const alert = await this.alertCtrl.create({
+      header: 'Mensagem',
+      //subHeader: 'Subtitle',
+      message: message1,
+      buttons: ['Fechar'],
+      cssClass: 'alert-custom'
+    });
+    this.loader.dismiss();
+    await alert.present(); 
+  }
+
   async startMeasurement() {
     const alert = await this.alertCtrl.create({
       header: 'Mensagem',
       //subHeader: 'Subtitle',
-      message: 'Por favor, após a montagem correta do MDSC, continue a medição.',
+      message: 'Por favor, realize corretamente a montagem do MDSC e continue a medição.',
       buttons: [{ text: 'Fechar'} , { text: 'Continuar', handler: () => {
         alert.dismiss();
         this.createLoading();
