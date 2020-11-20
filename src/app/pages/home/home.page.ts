@@ -277,23 +277,24 @@ async startNewCalibrationAlert() {
   
 
   async showAlertAndCloseLoading(data) {
-    var name = ''
+    var message = ''
     //console.log(data['data1'])
     
-    if(data['data1'] == 1) {
-      name = 'defeituosa.'
-    } else if (data['data1'] == 0){
-      name = 'normal.' 
+    if(data['data1'] < 0.5) {
+      var value = (1 - data['data1']) * 100 
+      message = 'Haste normal. Probabilidade: ' + value.toFixed(2) + '%'  
+    } else {
+      var value = data['data1'] * 100
+      message = 'Haste defeituosa. Probabilidade: ' +  value.toFixed(2) + '%' 
     }
     
-
     const alert = await this.alertCtrl.create({
-      header: 'Resultado da Medição',
+      header: 'Condição da Haste',
       //subHeader: 'Subtitle',
 
-      message:'A haste está ' + '<strong>' + name + '</strong>',
+      message: message,
       buttons: ['Fechar'],
-      cssClass: 'alert-custom'
+      cssClass: 'alert-custom alert-final'
     });
     this.loader.dismiss();
     await alert.present(); 
@@ -332,8 +333,16 @@ async startNewCalibrationAlert() {
       this.startMeasurement();
   }
   
+  async createMeasurementLoading() {
+    this.loader = await this.loadingCtrl.create({
+      message: 'Correlação encontrada. Processo de análise sendo efetuado. Por favor aguarde ...',
+      cssClass: 'loading-custom'
+    });
+    this.loader.present();
+  }
+
   async processData() {
-    this.createLoading();
+    this.createMeasurementLoading();
     this.appServices.processFile().subscribe((data1) => {
       this.loader.dismiss();
       this.showAlertAndCloseLoading(data1);
@@ -372,10 +381,11 @@ async startNewCalibrationAlert() {
     return vel_img
   }
  
+ 
   async startOtherMeasurement(data) {
     data['corr'] += 1;
 
-    var message1 = 'Por favor, remonte corretamente o MDSC e continue a medição.';
+    var message1 = 'Dados não correlacionados. Por favor, remonte o sistema e efetue mais uma medição.';
 
     if(data['corr_value'] != undefined) {
       var vel_img = this.getCorrImage(data['corr_value'])
@@ -391,6 +401,7 @@ async startNewCalibrationAlert() {
         alert.dismiss();
         this.createLoading();
         this.appServices.startMeasurement(data).subscribe((data1) => {
+        
          this.loader.dismiss();
           if(data1['data'] == 0) {
             this.startOtherMeasurement(data);
@@ -427,7 +438,7 @@ async startNewCalibrationAlert() {
     const alert = await this.alertCtrl.create({
       header: 'Mensagem',
       //subHeader: 'Subtitle',
-      message: 'Por favor, realize corretamente a montagem do MDSC e continue a medição.',
+      message: 'Por favor, realize a montagem do MDSC e selecione CONTINUAR para iniciar a medição.',
       buttons: [{ text: 'Fechar'} , { text: 'Continuar', handler: () => {
         alert.dismiss();
         this.createLoading();

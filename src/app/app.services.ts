@@ -35,8 +35,8 @@ export class AppServices {
         return this.httpClient.post(URL + 'saveCalibrationStatus', { 'data' : 0 });
     }
 
-    processFile(data) {
-        return this.httpClient.post(URL + 'fileProcess', data);
+    processFile() {
+        return this.httpClient.post(URL + 'fileProcess', { 'data' : 0 });
     }
 
     shutdown() {
