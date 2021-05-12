@@ -9,8 +9,6 @@ import { ModalController } from '@ionic/angular';
 })
 export class ModalPage {
 
-  operator: NgModel; 
-  line: NgModel; 
   tower: NgModel; 
   estai: NgModel; 
   
@@ -23,21 +21,15 @@ export class ModalPage {
   logForm() {
     let data = [];
    
-    if(!this.isStringEmpty(this.operator)) {
-      data.push({'operador' : this.operator});
-      if(!this.isStringEmpty(this.line)) {
-        data.push({'linha' : this.line});
-        if(!this.isStringEmpty(this.tower)) {
-          data.push({'torre' : this.tower});
-          if(!this.isStringEmpty(this.estai)) {
+    
+      
+      if(!this.isStringEmpty(this.tower)) {
+        data.push({'torre' : this.tower});
+        if(!this.isStringEmpty(this.estai)) {
             data.push({'estai' : this.estai});
             this.modalCtrl.dismiss(data);
-          }
         }
       }
-
-    }
-    
   }
 
   isStringEmpty(data : any) {

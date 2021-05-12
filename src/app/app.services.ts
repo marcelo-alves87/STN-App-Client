@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 
-//const URL = 'http://localhost:3000/';
-const URL = 'http://192.168.0.154:3000/';
+const URL = 'http://localhost:3000/';
+//const URL = 'http://192.168.0.154:3000/';
 export class AppServices {
     
    
