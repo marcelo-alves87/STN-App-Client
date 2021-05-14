@@ -141,8 +141,8 @@ async confirmLoadedCalAlert(data) {
     message: 'A última calibração foi feita em ' + data.date.trim() +'. Deseja realizar uma nova calibração?',
     buttons: [{ text: 'Não', cssClass: 'secondary', handler: () => {
       alert.dismiss();
-      //this.createMeasurementForm();
-      this.startMeasurement();
+      this.createMeasurementForm();
+      //this.startMeasurement();
     }}, {
       text: 'Sim',
       handler: () => {
@@ -268,8 +268,8 @@ async startNewCalibrationAlert() {
         this.createNonVNAConnectionAlert();
       } else {
         this.loader.dismiss();
-        //this.createMeasurementForm();
-        this.startMeasurement();
+        this.createMeasurementForm();
+        //this.startMeasurement();
       }
     });
   }
@@ -282,10 +282,12 @@ async startNewCalibrationAlert() {
     
     if(data['data1'] < 0.5) {
       var value = (1 - data['data1']) * 100 
-      message = 'Haste normal. Probabilidade: ' + value.toFixed(2) + '%'  
+      var value2 = data['data1'] * 100 
+      message = 'Haste ' + value.toFixed(2) + ' % normal e ' +  value2.toFixed(2) + 'corroída.'   
     } else {
-      var value = data['data1'] * 100
-      message = 'Haste defeituosa. Probabilidade: ' +  value.toFixed(2) + '%' 
+      var value = (1 - data['data1']) * 100 
+      var value2 = (data['data1']) * 100 
+      message = 'Haste ' + value.toFixed(2) + ' % normal e ' +  value2.toFixed(2) + 'corroída.'  
     }
     
     const alert = await this.alertCtrl.create({
@@ -293,7 +295,10 @@ async startNewCalibrationAlert() {
       //subHeader: 'Subtitle',
 
       message: message,
-      buttons: ['Fechar'],
+      buttons: [{text : 'Fechar'}, { text: 'Continuar', handler: () => {
+        alert.dismiss();
+        this.repeatMeasureAgain()
+      }}],
       cssClass: 'alert-custom alert-final'
     });
     this.loader.dismiss();
@@ -301,9 +306,40 @@ async startNewCalibrationAlert() {
    
   }
 
+  async repeatMeasureAgain() {
+    const alert = await this.alertCtrl.create({
+      header: 'Mensagem',
+      //subHeader: 'Subtitle',
+      message: 'Deseja medir uma nova haste?',
+      buttons: ['Não', { text : 'Sim', handler: () => {
+        alert.dismiss();
+        this.createConnectionAlert();
+      }}],
+      cssClass: 'alert-custom'
+    });
+    this.loader.dismiss();
+    await alert.present();
+  }
+
   
   myclick() {
-    this.checkConnectionAndCalibrationStatus();
+    this.createConnectionAlert();
+  }
+
+
+  // 1 Passo
+  async createConnectionAlert() {
+    const alert = await this.alertCtrl.create({
+      header: 'Mensagem',
+      //subHeader: 'Subtitle',
+      message: 'Por favor, conecte o cabo coaxial ao VNA.',
+      buttons: ['Fechar', { text : 'Continuar', handler: () => {
+        alert.dismiss();
+        this.checkConnectionAndCalibrationStatus();
+      }}],
+      cssClass: 'alert-custom'
+    });
+    await alert.present();
   }
 
   checkConnectionAndCalibrationStatus() {
@@ -330,9 +366,42 @@ async startNewCalibrationAlert() {
   return await modal.present();
   }
   executeProcess(data) {
-      this.startMeasurement();
+      this.createConnectionAgainAlert(data);
   }
   
+  async createConnectionAgainAlert(data) {
+    const alert = await this.alertCtrl.create({
+      header: 'Mensagem',
+      //subHeader: 'Subtitle',
+      message: 'O cabo coaxial foi conectado ao MDSC?',
+      buttons: [{ text : 'Não', handler: () => {
+        alert.dismiss();
+        this.createConnectionAlert();
+      }}, { text : 'Sim', handler: () => {
+        alert.dismiss();
+        this.createInitMeasurementAlert(data);
+      }}],
+      cssClass: 'alert-custom'
+    });
+    this.loader.dismiss();
+    await alert.present();
+  }
+
+  async createInitMeasurementAlert(data) {
+    const alert = await this.alertCtrl.create({
+      header: 'Mensagem',
+      //subHeader: 'Subtitle',
+      message: 'Iniciar medição.',
+      buttons: [{ text : 'Fechar'}, { text : 'Continuar', handler: () => {
+        alert.dismiss();
+        this.startMeasurement(data);
+      }}],
+      cssClass: 'alert-custom'
+    });
+    this.loader.dismiss();
+    await alert.present();
+  }
+
   async createMeasurementLoading() {
     this.loader = await this.loadingCtrl.create({
       message: 'Correlação encontrada. Processo de análise sendo efetuado. Por favor aguarde ...',
@@ -392,7 +461,7 @@ async startNewCalibrationAlert() {
       var num = (data['corr_value'] * 100).toFixed(0)      
       message1 = '<ion-grid style="height: 100%"><ion-row justify-content-center><img class="velocity" src="../assets/imgs/' + vel_img + '"/></ion-row><ion-row class="velocity-percent-row" justify-content-center><span class="velocity-percent">%</span></ion-row><ion-row justify-content-center><span class="velocity-text">' + num + '</span></ion-row><ion-row class="process-result-row" justify-content-center><span class="process-result">' + message1 + '</ion-row></ion-grid>'
     }
-
+    
     const alert = await this.alertCtrl.create({
       header: 'Mensagem',
       //subHeader: 'Subtitle',
@@ -406,9 +475,9 @@ async startNewCalibrationAlert() {
           if(data1['data'] == 0) {
             this.startOtherMeasurement(data);
           } else if(data1['data'] == 2) {
-             this.processData();
+            this.processData();
           } else if(data1['data'] == 1) {
-            this.creatDefaultAlert('Não foi possível obter um valor mínimo de correlação. Por favor, tente novamente.')
+            this.creatDefaultAlert('Os dados não estão correlacionados. A medição será invalidada.')
           } else if(data1['data'] == 3) {
             data['corr_value'] = data1['corr']
             this.startOtherMeasurement(data);
@@ -434,7 +503,7 @@ async startNewCalibrationAlert() {
     await alert.present(); 
   }
 
-  async startMeasurement() {
+  async startMeasurement(data2) {
     const alert = await this.alertCtrl.create({
       header: 'Mensagem',
       //subHeader: 'Subtitle',
@@ -442,10 +511,11 @@ async startNewCalibrationAlert() {
       buttons: [{ text: 'Fechar'} , { text: 'Continuar', handler: () => {
         alert.dismiss();
         this.createLoading();
-        this.appServices.startMeasurement({'corr' : 1}).subscribe((data1) => {
+        data2['corr'] = 1
+        this.appServices.startMeasurement(data2).subscribe((data1) => {
           this.loader.dismiss();
           if(data1['data'] == 0) {
-            this.startOtherMeasurement({'corr' : 1});
+            this.startOtherMeasurement(data2);
           } else {
             // criar alerta de erro
           }
