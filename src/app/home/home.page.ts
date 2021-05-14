@@ -1,6 +1,9 @@
 import { Component, ViewChild, OnInit } from '@angular/core';
 import { ChartComponent } from 'angular2-chartjs';
 
+/* npm install angular2-chartjs chart.js --save
+npm install @types/chart.js --save */
+
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
