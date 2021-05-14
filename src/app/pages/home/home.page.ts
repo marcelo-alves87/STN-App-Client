@@ -297,7 +297,7 @@ async startNewCalibrationAlert() {
       message: message,
       buttons: [{text : 'Fechar'}, { text: 'Continuar', handler: () => {
         alert.dismiss();
-       //
+        this.repeatMeasureAgain()
       }}],
       cssClass: 'alert-custom alert-final'
     });
@@ -326,6 +326,8 @@ async startNewCalibrationAlert() {
     this.createConnectionAlert();
   }
 
+
+  // 1 Passo
   async createConnectionAlert() {
     const alert = await this.alertCtrl.create({
       header: 'Mensagem',
@@ -337,7 +339,6 @@ async startNewCalibrationAlert() {
       }}],
       cssClass: 'alert-custom'
     });
-    this.loader.dismiss();
     await alert.present();
   }
 
