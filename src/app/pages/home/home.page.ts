@@ -454,7 +454,7 @@ async startNewCalibrationAlert() {
   async startOtherMeasurement(data) {
     data['corr'] += 1;
 
-    var message1 = 'Dados não correlacionados. Por favor, remonte o sistema e efetue mais uma medição.';
+    var message1 = 'Por favor, remonte o sistema e efetue mais uma medição.';
 
     if(data['corr_value'] != undefined) {
       var vel_img = this.getCorrImage(data['corr_value'])
