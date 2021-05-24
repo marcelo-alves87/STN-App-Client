@@ -3,6 +3,7 @@ import { NavController, AlertController, LoadingController, ModalController, Men
 import { HttpClient } from '@angular/common/http';
 import { AppServices } from '../../app.services';
 import { ModalPage } from '../modal/modal.page';
+import { Router } from '@angular/router';
 
 
 
@@ -17,7 +18,7 @@ export class HomePage {
   loader: any;
 
     
-  constructor(public navCtrl: NavController,public alertCtrl: AlertController,public loadingCtrl: LoadingController, public httpClient: HttpClient, public modalController: ModalController, public menuController : MenuController, public events: Events) {
+  constructor(public navCtrl: NavController,public alertCtrl: AlertController,public loadingCtrl: LoadingController, public httpClient: HttpClient, public modalController: ModalController, public menuController : MenuController, public events: Events, private router: Router) {
     
     this.appServices = new AppServices(httpClient);
 
@@ -323,7 +324,7 @@ async startNewCalibrationAlert() {
 
   
   myclick() {
-    this.createConnectionAlert();
+    this.router.navigate(['/time']);
   }
 
 
@@ -456,11 +457,11 @@ async startNewCalibrationAlert() {
 
     var message1 = 'Por favor, remonte o sistema e efetue mais uma medição.';
 
-    if(data['corr_value'] != undefined) {
+    /* if(data['corr_value'] != undefined) {
       var vel_img = this.getCorrImage(data['corr_value'])
       var num = (data['corr_value'] * 100).toFixed(0)      
       message1 = '<ion-grid style="height: 100%"><ion-row justify-content-center><img class="velocity" src="../assets/imgs/' + vel_img + '"/></ion-row><ion-row class="velocity-percent-row" justify-content-center><span class="velocity-percent">%</span></ion-row><ion-row justify-content-center><span class="velocity-text">' + num + '</span></ion-row><ion-row class="process-result-row" justify-content-center><span class="process-result">' + message1 + '</ion-row></ion-grid>'
-    }
+    } */
     
     const alert = await this.alertCtrl.create({
       header: 'Mensagem',
