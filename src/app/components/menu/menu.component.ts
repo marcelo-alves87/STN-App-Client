@@ -15,6 +15,10 @@ export class MenuComponent implements AfterViewInit {
   }
  
   ngAfterViewInit(): void {
+
+    this.elementRef.nativeElement.children[0].children[1].children[0].children[0].addEventListener('click', function () {
+      MenuComponent.events1.publish('time');
+    }); 
     
     this.elementRef.nativeElement.children[0].children[1].children[0].children[1].addEventListener('click', function () {
       MenuComponent.events1.publish('about');

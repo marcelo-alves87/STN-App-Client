@@ -2,9 +2,55 @@ ion-title{
     text-align: center;
 }
 
+@media only screen and (max-width: 550px) {
+    
+}
+
+@media only screen and (max-width: 429px) {
+    ion-title {
+        font-size: medium !important;
+     }
+
+     ion-card-title {
+        font-size: large !important;
+     }
+          
+}
+
+@media only screen and (max-width: 399px) {
+    ion-title {
+        font-size: small !important;
+     }
+
+     ion-icon{
+        font-size: 18px !important;
+     }
+
+     ion-card-title {
+        font-size: medium !important;
+     }
+
+}
+
+
+@media only screen and (max-width: 330px) {
+    ion-title{
+        font-size: 11px !important;
+     }
+
+     ion-icon{
+        font-size: 16px !important;
+     }
+
+     ion-card-title {
+        font-size: 15px !important;
+     }
+     
+}
+
 .md {
     --background: var(--ion-toolbar-background,var(--ion-background-color,#f8f8f8));
-    font-size: x-large;   
+    //font-size: x-large;   
 }
 
 .custom {

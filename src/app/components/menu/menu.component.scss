@@ -1,3 +1,31 @@
 .menuContent {
     cursor: pointer;  
 }
+
+@media only screen and (max-width: 550px) {
+    
+}
+
+@media only screen and (max-width: 429px) {
+    ion-item {
+        font-size: large !important;
+    }
+          
+}
+
+@media only screen and (max-width: 399px) {
+    ion-item {
+        font-size: medium !important;
+    }
+
+    
+}
+
+
+@media only screen and (max-width: 330px) {
+    ion-item {
+        font-size: 18px !important;
+    }
+
+     
+}

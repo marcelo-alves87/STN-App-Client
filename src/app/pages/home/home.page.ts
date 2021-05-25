@@ -25,7 +25,10 @@ export class HomePage {
     events.subscribe('about', (data) => {
       this.showAboutAlert();
     });
-        
+       
+    events.subscribe('time', (data) => {
+      this.router.navigate(['/time'])
+    });
   }
 
   async showAboutAlert() {
@@ -324,7 +327,7 @@ async startNewCalibrationAlert() {
 
   
   myclick() {
-    this.router.navigate(['/time']);
+    this.createConnectionAlert();
   }
 
 

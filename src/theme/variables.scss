@@ -92,3 +92,58 @@
   overflow: initial;
 }
 
+@media only screen and (max-width: 550px) {
+  .alert-custom .alert-wrapper {
+    transform: scale(1.5) !important;
+  }
+
+  
+  .loading-custom .loading-wrapper {
+    transform: scale(1.5) !important;
+  }
+
+  .modal-wrapper.sc-ion-modal-md {
+    transform: scale(1.2) !important;
+  }
+    
+}
+
+@media only screen and (max-width: 429px) {
+  .alert-custom .alert-wrapper {
+    transform: scale(1.2) !important;
+  }
+
+  .loading-custom .loading-wrapper {
+    transform: scale(1.2) !important;
+  }
+
+  .modal-wrapper.sc-ion-modal-md {
+    transform: scale(0.9) !important;
+  }
+}
+
+@media only screen and (max-width: 399px) {
+  .alert-custom .alert-wrapper {
+    transform: scale(1) !important;
+  }
+  .loading-custom .loading-wrapper {
+    transform: scale(1) !important;
+  }
+  .modal-wrapper.sc-ion-modal-md {
+    transform: scale(0.8) !important;
+  }
+}
+
+
+@media only screen and (max-width: 330px) {
+  .alert-custom .alert-wrapper {
+    transform: scale(1) !important;
+  }
+  .loading-custom .loading-wrapper {
+    transform: scale(0.8) !important;
+  }
+
+  .modal-wrapper.sc-ion-modal-md {
+    transform: scale(0.8) !important;
+  }
+}
