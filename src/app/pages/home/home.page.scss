@@ -14,6 +14,10 @@ ion-title{
      ion-card-title {
         font-size: large !important;
      }
+
+     .battery-lvl {
+        font-size: medium !important;
+     }
           
 }
 
@@ -28,6 +32,10 @@ ion-title{
 
      ion-card-title {
         font-size: medium !important;
+     }
+
+     .battery-lvl {
+        font-size: small !important;
      }
 
 }
@@ -45,9 +53,30 @@ ion-title{
      ion-card-title {
         font-size: 15px !important;
      }
+
+     .battery-lvl {
+        font-size: 11px !important;
+     }
      
 }
 
+.battery-lvl {
+    margin-right: 10px;
+ }
+
+.battery-div {
+    margin-top: 6px;
+}
+
+.battery {    
+    transform: rotate(270deg);    
+}
+.battery-right {
+    position: absolute;
+    right: 1px;
+    width: 20%;
+    color: var(--battery-color);
+}
 .md {
     --background: var(--ion-toolbar-background,var(--ion-background-color,#f8f8f8));
     //font-size: x-large;   

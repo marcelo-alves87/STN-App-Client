@@ -2,24 +2,29 @@
   <ion-toolbar>
     
     <ion-buttons slot="start">
-      <ion-button (click)='shutdown()'>
-        <ion-icon slot="icon-only" name="power"></ion-icon>
-      </ion-button>
+      <ion-button (click)='openMenu()'>
+        <ion-icon slot="icon-only" name="menu"></ion-icon>
+      </ion-button> 
     </ion-buttons>
     
     
     <ion-title>
-      Sistema de Transmissão Nordeste
+      STN
     </ion-title>   
     
     
 
     <ion-buttons slot="end">
-      <ion-button>
-        <ion-button (click)='openMenu()'>
-          <ion-icon slot="icon-only" name="menu"></ion-icon>
-        </ion-button>
-      </ion-button>
+      <!-- <ion-button (click)='shutdown()'>
+      <ion-icon slot="icon-only" name="power"></ion-icon>
+      </ion-button> -->
+      
+      
+      <span class="battery-lvl">{{battery_lvl}}</span>
+      <div class="battery-div">
+        <ion-icon class="battery" slot="icon-only" name="battery-dead"></ion-icon>        
+        <ion-icon class="battery battery-right" slot="icon-only" name="battery-full"></ion-icon>
+      </div>
     </ion-buttons>
 
   </ion-toolbar> 

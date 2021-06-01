@@ -16,12 +16,13 @@ export class HomePage {
 
   appServices:AppServices;
   loader: any;
-
+  battery_lvl: any;
     
   constructor(public navCtrl: NavController,public alertCtrl: AlertController,public loadingCtrl: LoadingController, public httpClient: HttpClient, public modalController: ModalController, public menuController : MenuController, public events: Events, private router: Router) {
     
     this.appServices = new AppServices(httpClient);
-
+    this.battery_lvl = "16%"
+    document.body.style.setProperty('--battery-color', 'red');
     events.subscribe('about', (data) => {
       this.showAboutAlert();
     });
@@ -65,7 +66,7 @@ export class HomePage {
   }
 
   openMenu() {
-    this.menuController.open();
+    this.menuController.toggle();
   }
 
 
