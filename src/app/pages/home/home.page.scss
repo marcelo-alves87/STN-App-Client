@@ -7,7 +7,7 @@ ion-title{
 }
 
 @media only screen and (max-width: 429px) {
-    ion-title {
+    ion-title, .ion-button-span  {
         font-size: medium !important;
      }
 
@@ -18,15 +18,20 @@ ion-title{
      .battery-lvl {
         font-size: medium !important;
      }
+
+     .ion-icon-card {
+        font-size: large !important;
+       
+    }
           
 }
 
 @media only screen and (max-width: 399px) {
-    ion-title {
+    ion-title, .ion-button-span  {
         font-size: small !important;
      }
 
-     ion-icon{
+     ion-icon {
         font-size: 18px !important;
      }
 
@@ -38,15 +43,20 @@ ion-title{
         font-size: small !important;
      }
 
+     .ion-icon-card {
+        font-size: 20px !important;
+       
+    }
+
 }
 
 
 @media only screen and (max-width: 330px) {
-    ion-title{
+    ion-title, .ion-button-span {
         font-size: 11px !important;
      }
 
-     ion-icon{
+     ion-icon, .ion-button-span {
         font-size: 16px !important;
      }
 
@@ -57,6 +67,11 @@ ion-title{
      .battery-lvl {
         font-size: 11px !important;
      }
+
+     .ion-icon-card {
+        font-size: 18px !important;
+       
+    }
      
 }
 
@@ -75,15 +90,23 @@ ion-title{
     position: absolute;
     right: 1px;
     width: 20%;
-    color: var(--battery-color);
+    //color: var(--battery-color);
 }
 .md {
-    --background: var(--ion-toolbar-background,var(--ion-background-color,#f8f8f8));
+   // --background: var(--ion-toolbar-background,var(--ion-background-color,#f8f8f8));
     //font-size: x-large;   
+    --border-width: 0px;
+    
 }
 
+ion-toolbar {
+    --background: rgb(53,190,203);
+    color: white;
+   
+}
 .custom {
-    --background: whitesmoke;
+    --background: rgb(60,121,141);
+    --background: linear-gradient(0deg, rgba(60,121,141,1) 0%, rgba(53,190,203,1) 100%);
 }
 
 ion-card {
@@ -91,9 +114,9 @@ ion-card {
 }
 
 .sc-ion-card-md-h {
-    --background: var(--ion-toolbar-background,var(--ion-background-color,#fff));
-    width: 100%;
-    padding: 13px 16px;  
+    --background: var(--ion-toolbar-background,var(--ion-background-color, rgb(227,229,228)));
+    border-radius: 20px;
+    width: 100%; 
 }
 
 ion-card-title {
@@ -145,3 +168,30 @@ input[type="file"] {
     margin-left: 5px;
 }
 
+.center-text{
+    font-size: 17px;
+  
+}
+
+img.light-shadow {
+    filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.4));
+}
+
+.buttons-last-slot {
+    margin-right: 15px;
+}
+
+.ion-icon-card {
+    color: rgb(35,166,178);
+   
+}
+
+.div-card-span {
+    font-weight: bold;
+    margin-left: 2px
+}
+
+
+.div-card {
+    display: inline-flex;
+}

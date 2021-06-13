@@ -50,3 +50,15 @@ ion-title, ion-card-title {
     text-align: center;
     margin-left: 5%;
 }
+
+.menu-content {
+    color: red;
+}
+
+ion-icon.light-shadow {
+    filter: drop-shadow(0px 1px 1px rgba(0, 0, 0, 0.1));
+}
+
+.alert-button-inner {
+    color: rgb(35,166,178) !important;
+}

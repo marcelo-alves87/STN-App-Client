@@ -5,12 +5,13 @@
       <ion-button (click)='openMenu()'>
         <ion-icon slot="icon-only" name="menu"></ion-icon>
       </ion-button> 
+      <span class="ion-button-span">Oxi Point</span>
     </ion-buttons>
     
     
-    <ion-title>
+    <!-- <ion-title>
       STN
-    </ion-title>   
+    </ion-title>    -->
     
     
 
@@ -34,17 +35,21 @@
   <app-menu></app-menu> 
   <ion-grid style="height: 100%">
     <ion-row justify-content-center align-items-center style="height: 45%">
-      <img src="../assets/imgs/logo.png"/>       
+      <img class="light-shadow" src="../assets/imgs/logo.png"/> 
+      
     </ion-row>
     <ion-row>
+              
+      <!-- <ion-button fill='clear' (click)='myclick()'><ion-icon class="icon-button" name="play"></ion-icon></ion-button> -->
       <ion-card>
-        <ion-card-content>
-          <ion-card-title>
-            Detector de Corrosão em Hastes de Âncora
-          </ion-card-title>          
-            <ion-button color="primary" (click)='myclick()'><span class='button-text'>Iniciar</span></ion-button>                     
+        <ion-card-content (click)='myclick()'>    
+            <div class="div-card">    
+              <ion-icon class='ion-icon-card' name="play"></ion-icon>
+              <span class="div-card-span">Detector de Haste de Âncora</span>
+            </div>
         </ion-card-content>
       </ion-card>
+      
     </ion-row>
   </ion-grid> 
   

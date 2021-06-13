@@ -5,7 +5,13 @@
 .endofLine {
     width: 100%;
     text-align: end;
+    
 }
+
+.endofLine-icon {
+    transform: rotate(90deg);
+    color: rgb(35,166,178);
+} 
 
 @media only screen and (max-width: 550px) {
     
@@ -13,14 +19,14 @@
 
 @media only screen and (max-width: 429px) {
     ion-item {
-        font-size: large !important;
+        font-size: smaller !important;
     }
           
 }
 
 @media only screen and (max-width: 399px) {
     ion-item {
-        font-size: medium !important;
+        font-size: smaller !important;
     }
 
     
@@ -29,7 +35,7 @@
 
 @media only screen and (max-width: 330px) {
     ion-item {
-        font-size: 18px !important;
+        font-size: x-small !important;
     }
 
      
