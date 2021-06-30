@@ -1,6 +1,6 @@
 import { Component, ViewChild, OnInit, Inject } from '@angular/core';
 import { ChartComponent } from 'angular2-chartjs';
-
+import { NavController } from '@ionic/angular';
 /* npm install angular2-chartjs chart.js --save
 npm install @types/chart.js --save */
 
@@ -12,7 +12,10 @@ npm install @types/chart.js --save */
 
 export class TimePage implements OnInit {
   
-  
+  constructor(public navCtrl: NavController) {
+
+  }
+
   @ViewChild(ChartComponent) chart: ChartComponent;
 	type;
 	data;
@@ -25,7 +28,7 @@ export class TimePage implements OnInit {
 			labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'November', 'December'],
 			datasets: [
         {
-          label: 'Sell per week',
+          label: 'Distância para Faulta',
           fill: false,
           lineTension: 0.1,
           backgroundColor: 'rgba(75,192,192,0.4)',
@@ -50,7 +53,7 @@ export class TimePage implements OnInit {
 		}
 		this.options = {
 			maintainAspectRatio: false,
-			responsive: false,
+			responsive: true,
 			legend: { display: true },
 			title: {
 				display: true,
@@ -58,6 +61,7 @@ export class TimePage implements OnInit {
 			},
 			scales:
 				{
+					
 					yAxes: [{
 						// barPercentage: 0.4,
 						barThickness: 20,
@@ -67,7 +71,7 @@ export class TimePage implements OnInit {
 						//Number - Pixel width of the bar
 						barWidth: 200,
 						gridLines: {
-							display: false
+							display: true
 						},
 						ticks: {
 							min: 0,
@@ -78,7 +82,7 @@ export class TimePage implements OnInit {
 					xAxes: [{
 						display: true,
 						gridLines: {
-							display: false
+							display: true
 						},
 						ticks: {
 							min: 0,
@@ -88,6 +92,10 @@ export class TimePage implements OnInit {
 					}],
 				}
 		}
+	}
+
+	toback() {
+		this.navCtrl.back();
 	}
 
 }

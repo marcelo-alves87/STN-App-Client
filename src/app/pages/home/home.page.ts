@@ -27,9 +27,9 @@ export class HomePage {
       this.showAboutAlert();
     });
        
-    events.subscribe('time', (data) => {
+    /* events.subscribe('time', (data) => {
       this.router.navigate(['/time'])
-    });
+    }); */
   }
 
   async showAboutAlert() {
@@ -331,6 +331,9 @@ async startNewCalibrationAlert() {
     this.createConnectionAlert();
   }
 
+  totime() {
+    this.router.navigate(['/time']);
+  }
 
   // 1 Passo
   async createConnectionAlert() {
