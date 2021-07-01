@@ -1,7 +1,8 @@
 import { Component, ViewChild, OnInit, Inject } from '@angular/core';
 import { ChartComponent } from 'angular2-chartjs';
 import { NavController } from '@ionic/angular';
-
+import { HttpClient } from '@angular/common/http';
+import { AppServices } from '../../app.services';
 
 /* npm install angular2-chartjs chart.js --save
 npm install @types/chart.js --save */
@@ -13,25 +14,26 @@ npm install @types/chart.js --save */
 })
 
 export class TimePage implements OnInit {
-  
-  constructor(public navCtrl: NavController) {
 
+  appServices:AppServices;
+  @ViewChild(ChartComponent) chart: ChartComponent;
+  type;
+  data;
+  options;
+
+  
+  constructor(public navCtrl: NavController, public httpClient: HttpClient) {
+	this.appServices = new AppServices(httpClient);
   }
 
-  @ViewChild(ChartComponent) chart: ChartComponent;
-	type;
-	data;
-	options;
-
-  ngOnInit() {
-    
-		this.type = 'line';
+  makechart() {
+	this.type = 'line';
 		this.data = {
-			labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'November', 'December'],
+			labels: [],
 			datasets: [
         {
-          label: 'Sell per week',
-          fill: false,
+          label: 'DPF',
+		  fill: true,
           lineTension: 0.1,
           backgroundColor: 'rgba(75,192,192,0.4)',
           borderColor: 'rgba(75,192,192,1)',
@@ -48,7 +50,7 @@ export class TimePage implements OnInit {
           pointHoverBorderWidth: 2,
           pointRadius: 1,
           pointHitRadius: 10,
-          data: [65, 59, 80, 81, 56, 55, 40, 10, 5, 50, 10, 15],
+          data: [],
           spanGaps: false,
         }
       ]
@@ -72,28 +74,43 @@ export class TimePage implements OnInit {
 						//Number - Pixel width of the bar
 						barWidth: 200,
 						gridLines: {
-							display: false
+							display: true
 						},
 						ticks: {
-							min: 0,
-							stepSize: 1,
-							fixedStepSize: 1,
-						}
+							min: 1,
+							max: 1.6,
+							stepSize: 0.1,
+							fixedStepSize: 0.1,
+						},
+						
 					}],
 					xAxes: [{
 						display: true,
 						gridLines: {
-							display: false
+							display: true
 						},
 						ticks: {
 							min: 0,
 							stepSize: 1,
 							fixedStepSize: 1,
+							fontSize: 15
+						},
+						scaleLabel: {
+							display: true,
+							labelString: 'Distância (m)',
+							fontSize: 20
 						}
 					}],
 				}
 		}
-	}
+  }
+
+  ngOnInit() {
+	this.makechart();
+	setTimeout(() => {
+		this.update()
+	},1000);
+  }
 
 	toback() {
 		this.navCtrl.back();
@@ -104,6 +121,21 @@ export class TimePage implements OnInit {
 		var a = document.createElement('a');
   		a.href = this.chart.chart.toBase64Image();
   		a.download = 'my_file_name.png';
-		a.click();
+		a.click(); 
+
+	}
+
+	update() {
+
+		let mydata = Object.values(this.appServices.getTimeDomainData()['data']);
+		
+		mydata.forEach((element, index) => {
+			this.chart.data.datasets[0].data[index] = element.vswr.toFixed(2)
+			this.chart.data.labels[index] = element.time.toFixed(2) 
+		});
+
+		
+		
+		this.chart.chart.update();
 	}
 }
