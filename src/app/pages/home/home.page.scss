@@ -19,10 +19,10 @@ ion-title{
         font-size: medium !important;
      }
 
-     .ion-icon-card {
-        font-size: large !important;
+    //  .ion-icon-card {
+    //     font-size: large !important;
        
-    }
+    // }
           
 }
 
@@ -31,9 +31,9 @@ ion-title{
         font-size: medium !important;
      }
 
-     ion-icon {
-        font-size: 18px !important;
-     }
+    //  ion-icon {
+    //     font-size: 18px !important;
+    //  }
 
      ion-card-title {
         font-size: medium !important;
@@ -43,10 +43,10 @@ ion-title{
         font-size: small !important;
      }
 
-     .ion-icon-card {
-        font-size: 20px !important;
+    //  .ion-icon-card {
+    //     font-size: 20px !important;
        
-    }
+    // }
 
 }
 
@@ -56,9 +56,9 @@ ion-title{
         font-size: 15px !important;
      }
 
-     ion-icon, .ion-button-span {
-        font-size: 16px !important;
-     }
+    //  ion-icon, .ion-button-span {
+    //     font-size: 16px !important;
+    //  }
 
      ion-card-title {
         font-size: 15px !important;
@@ -68,10 +68,10 @@ ion-title{
         font-size: 11px !important;
      }
 
-     .ion-icon-card {
-        font-size: 18px !important;
+    //  .ion-icon-card {
+    //     font-size: 18px !important;
        
-    }
+    // }
      
 }
 
@@ -99,15 +99,10 @@ ion-title{
     
 }
 
-ion-toolbar {
-    --background: rgb(53,190,203);
-    color: white;
-   
-}
-.custom {
-    --background: rgb(60,121,141);
-    --background: linear-gradient(0deg, rgba(60,121,141,1) 0%, rgba(53,190,203,1) 100%);
-}
+/* .ion-header-home {
+    //--background: transparent;
+} */
+
 
 ion-card {
     text-align: center;
@@ -121,15 +116,50 @@ ion-card {
 
 ion-card-title {
    margin-bottom: 10px;
-} 
+}
 
-img {
+ion-toolbar {
+    --background: transparent;
+    
+}
+
+
+ 
+ .custom {
+    --background: #e3e3e3;  /* fallback for old browsers */   
+ }
+ 
+
+.ion-row-logo {
+    margin-top: 20%;
+}
+
+.ion-row-logo img {
+    max-width: 53%;
+    font-size: 20px;
+}
+
+.ion-item-div {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.ion-item-div ion-icon {
+    width: 100%;
+    font-size: 40px;
+}
+
+.ion-item-div ion-label {
+    font-size: 10px;
+}
+
+/* img {
     display: block;
     max-width: 128px;
     min-width: 100px;
     margin-left: auto;
     margin-right: auto;
-}
+} */
 
 .alert-message {
     overflow: initial;

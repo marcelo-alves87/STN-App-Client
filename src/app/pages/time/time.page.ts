@@ -32,7 +32,7 @@ export class TimePage implements OnInit {
 			labels: [],
 			datasets: [
         {
-          label: 'DPF',
+          label: 'DTF',
 		  fill: true,
           lineTension: 0.1,
           backgroundColor: 'rgba(75,192,192,0.4)',
