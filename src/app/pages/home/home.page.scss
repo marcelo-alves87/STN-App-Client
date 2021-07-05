@@ -109,9 +109,8 @@ ion-card {
 }
 
 .sc-ion-card-md-h {
-    --background: var(--ion-toolbar-background,var(--ion-background-color, rgb(227,229,228)));
-    border-radius: 20px;
-    width: 100%; 
+    
+    border-radius: 20px;    
 }
 
 ion-card-title {
@@ -123,25 +122,43 @@ ion-toolbar {
     
 }
 
+.content {
+    background-color: rgba(255, 255, 255, .15);  
+    backdrop-filter: blur(20px);
+    width: 90%;
+    margin-left: 5%;
+    margin-top: 10%;    
+    padding-bottom: 20%;
+}
 
+.main-card {
+    --background: rgb(222,35,90);
+    color: white;   
+}
  
  .custom {
-    --background: #e3e3e3;  /* fallback for old browsers */   
+    --background: url("/../assets/imgs/IMG_4029.png") no-repeat center center / cover;
+    
+ }
+
+ .ion-card-raw {
+     margin-top: 10%;
  }
  
 
 .ion-row-logo {
-    margin-top: 20%;
+    margin-top: 10%;
 }
 
 .ion-row-logo img {
-    max-width: 53%;
+    max-width: 60%;
     font-size: 20px;
 }
 
 .ion-item-div {
     padding-top: 20px;
     padding-bottom: 20px;
+    
 }
 
 .ion-item-div ion-icon {
@@ -150,7 +167,9 @@ ion-toolbar {
 }
 
 .ion-item-div ion-label {
-    font-size: 10px;
+    font-size: 13px;
+    white-space: inherit;
+    text-align: center;
 }
 
 /* img {
