@@ -1,11 +1,11 @@
-<ion-header no-border no-shadow class="ion-header-home">
+<ion-header no-border class="ion-header-home">
   <ion-toolbar>
     
-    <!-- <ion-buttons slot="start">
+    <ion-buttons slot="start" class="button-header">
       <ion-button (click)='openMenu()'>
         <ion-icon slot="icon-only" name="menu" style="color: white;"></ion-icon>
       </ion-button>       
-    </ion-buttons> -->
+    </ion-buttons>
    
       <!-- <span class="battery-lvl">{{battery_lvl}}</span>
       <div class="battery-div">
@@ -17,8 +17,8 @@
   </ion-toolbar> 
 </ion-header>
 
-<ion-content class="custom" fullscreen="true">
-  <!-- <app-menu></app-menu>  -->
+<ion-content class="custom" fullscreen> 
+  <app-menu></app-menu>  
   <div class="content">
   <ion-grid>
     <ion-row justify-content-center align-items-center class='ion-row-logo'>
@@ -62,3 +62,9 @@
 
 
 </ion-content>
+
+<!-- <ion-footer no-border class="ion-header-home">
+  <ion-toolbar>
+    <ion-title>Footer</ion-title>
+  </ion-toolbar>
+</ion-footer> -->

@@ -99,13 +99,17 @@ ion-title{
     
 }
 
-/* .ion-header-home {
-    //--background: transparent;
-} */
+.ion-header-home {
+    --background: red;
+} 
 
+.button-header {
+    filter: drop-shadow(2px 4px 6px black);
+}
 
 ion-card {
     text-align: center;
+    filter: drop-shadow(2px 4px 8px gray);
 }
 
 .sc-ion-card-md-h {
@@ -132,7 +136,7 @@ ion-toolbar {
 }
 
 .main-card {
-    --background: rgb(222,35,90);
+    --background: rgb(41,120,120);
     color: white;   
 }
  
