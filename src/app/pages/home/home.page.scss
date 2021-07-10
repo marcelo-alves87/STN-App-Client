@@ -109,7 +109,7 @@ ion-title{
 
 ion-card {
     text-align: center;
-    filter: drop-shadow(2px 4px 8px gray);
+    filter: drop-shadow(1px 1px 1px black);
 }
 
 .sc-ion-card-md-h {
@@ -142,7 +142,7 @@ ion-toolbar {
  
  .custom {
     --background: url("/../assets/imgs/IMG_4029.png") no-repeat center center / cover;
-    
+    filter: saturate(0.5);
  }
 
  .ion-card-raw {
@@ -226,8 +226,8 @@ input[type="file"] {
   
 }
 
-img.light-shadow {
-    filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.4));
+.light-shadow {
+    filter: drop-shadow(2px 4px 6px black);
 }
 
 .buttons-last-slot {
