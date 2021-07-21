@@ -335,6 +335,10 @@ async startNewCalibrationAlert() {
     this.router.navigate(['/time']);
   }
 
+  tona() {
+    this.router.navigate(['/na']);
+  }
+
   // 1 Passo
   async createConnectionAlert() {
     const alert = await this.alertCtrl.create({

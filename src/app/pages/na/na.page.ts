@@ -1,29 +1,25 @@
-import { Component, ViewChild, OnInit, Inject } from '@angular/core';
+import { Component, ViewChild, OnInit } from '@angular/core';
+import { AppServices } from '../../app.services';
 import { ChartComponent } from 'angular2-chartjs';
 import { NavController } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
-import { AppServices } from '../../app.services';
-
-/* npm install angular2-chartjs chart.js --save
-npm install @types/chart.js --save */
+import { Socket } from 'ngx-socket-io';
 
 @Component({
-  selector: 'time-home',
-  templateUrl: 'time.page.html',
-  styleUrls: ['time.page.scss'],
+  selector: 'app-na',
+  templateUrl: './na.page.html',
+  styleUrls: ['./na.page.scss'],
 })
-
-export class TimePage implements OnInit {
+export class NaPage implements OnInit {
 
   appServices:AppServices;
   @ViewChild(ChartComponent) chart: ChartComponent;
   type;
   data;
   options;
-
   
-  constructor(public navCtrl: NavController, public httpClient: HttpClient) {
-	this.appServices = new AppServices(httpClient);
+  constructor(public navCtrl: NavController, public httpClient: HttpClient, public socket: Socket) {
+	  this.appServices = new AppServices(httpClient);
   }
 
   makechart() {
@@ -32,8 +28,8 @@ export class TimePage implements OnInit {
 			labels: [],
 			datasets: [
         {
-          label: 'DTF',
-		  fill: true,
+          label: 'NA',
+		  fill: false,
           lineTension: 0.1,
           backgroundColor: 'rgba(75,192,192,0.4)',
           borderColor: 'rgba(75,192,192,1)',
@@ -75,28 +71,20 @@ export class TimePage implements OnInit {
 						gridLines: {
 							display: true
 						},
-						ticks: {
-							min: 1,
-							max: 1.08,
-							stepSize: 0.01,
-							
+            scaleLabel: {
+							display: true,
+							labelString: 'S11 (dB)',
+							fontSize: 20
 						},
-						
 					}],
 					xAxes: [{
 						display: true,
 						gridLines: {
 							display: true
 						},
-						ticks: {
-							min: 0,
-							stepSize: 1,
-							fixedStepSize: 1,
-							fontSize: 15
-						},
 						scaleLabel: {
 							display: true,
-							labelString: 'Distância (m)',
+							labelString: 'Frequency (Hz)',
 							fontSize: 20
 						}
 					}],
@@ -105,10 +93,9 @@ export class TimePage implements OnInit {
   }
 
   ngOnInit() {
-	this.makechart();
-	setTimeout(() => {
-		this.update()
-	},1000);
+    this.makechart();
+    this.update();
+    this.socket.connect();
   }
 
 	toback() {
@@ -120,21 +107,25 @@ export class TimePage implements OnInit {
 		var a = document.createElement('a');
   		a.href = this.chart.chart.toBase64Image();
   		a.download = 'my_file_name.png';
-		a.click(); 
-
+		a.click();    
+    this.socket.emit('test', 'Hello World' );
 	}
 
 	update() {
 
-		let mydata = Object.values(this.appServices.getTimeDomainData()['data']);
-		
-		mydata.forEach((element, index) => {
-			this.chart.data.datasets[0].data[index] = element.vswr.toFixed(2)
-			this.chart.data.labels[index] = element.time.toFixed(2) 
-		});
+    this.appServices.getFrequencyData({}).subscribe((data) => {
+      let mydata = Object.values(data['data']);
+      
+      mydata.forEach((element, index) => {
+        this.chart.data.datasets[0].data[index] = element['s11'].toFixed(2)
+        this.chart.data.labels[index] = element['freq'].toFixed(0) 
+      });
+      this.chart.chart.update();
+    });   
 
-		
-		
-		this.chart.chart.update();
+    /* setTimeout(() => {
+      this.update()
+    },1000); */
 	}
+  
 }

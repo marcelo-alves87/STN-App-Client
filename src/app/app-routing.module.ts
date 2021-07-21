@@ -5,7 +5,8 @@ const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'home', loadChildren: './pages/home/home.module#HomePageModule' },
   { path: 'modal', loadChildren: './pages/modal/modal.module#ModalPageModule' },
-  { path: 'time', loadChildren: './pages/time/time.module#TimePageModule' }
+  { path: 'time', loadChildren: './pages/time/time.module#TimePageModule' },  { path: 'na', loadChildren: './pages/na/na.module#NaPageModule' }
+
   
   
 
